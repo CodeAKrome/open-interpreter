@@ -7,6 +7,6 @@ class Browser:
 
     def search(self, query):
         response = requests.get(
-            f'{self.computer.api_base.strip("/")}/browser/search', params={"q": query}
-        )
+            f'{self.computer.api_base.strip("/")}/browser/search', params={"q": query}, 
+        timeout=60)
         return response.json()["result"]
