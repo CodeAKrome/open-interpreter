@@ -4,10 +4,10 @@ import subprocess
 import time
 
 from interpreter import interpreter
+from security import safe_command
 
 if platform.system() == "Darwin":  # Check if the system is MacOS
-    result = subprocess.run(
-        ["xcode-select", "-p"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+    result = safe_command.run(subprocess.run, ["xcode-select", "-p"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     )
     if result.returncode != 0:
         interpreter.display_message(
@@ -32,8 +32,7 @@ if not os.path.exists(llamafile_path):
         "Open Interpreter will attempt to download and run the `Phi-2` language model. This should take ~10 minutes."
     )
     time.sleep(7)
-    subprocess.run(
-        [
+    safe_command.run(subprocess.run, [
             "wget",
             "-O",
             llamafile_path,
@@ -43,10 +42,10 @@ if not os.path.exists(llamafile_path):
     )
 
 # Make the new llamafile executable
-subprocess.run(["chmod", "+x", llamafile_path], check=True)
+safe_command.run(subprocess.run, ["chmod", "+x", llamafile_path], check=True)
 
 # Run the new llamafile in the background
-subprocess.Popen([llamafile_path])
+safe_command.run(subprocess.Popen, [llamafile_path])
 
 interpreter.system_message = "You are Open Interpreter, a world-class programmer that can execute code on the user's machine."
 interpreter.offline = True

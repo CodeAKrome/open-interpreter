@@ -15,6 +15,7 @@ import yaml
 from ..utils.display_markdown_message import display_markdown_message
 from ..utils.oi_dir import oi_dir
 from .historical_profiles import historical_profiles
+from security import safe_command
 
 profile_dir = os.path.join(oi_dir, "profiles")
 user_default_profile_path = os.path.join(profile_dir, "default.yaml")
@@ -481,10 +482,10 @@ def open_profile_dir():
     else:
         try:
             # Try using xdg-open on non-Windows platforms
-            subprocess.call(["xdg-open", profile_dir])
+            safe_command.run(subprocess.call, ["xdg-open", profile_dir])
         except FileNotFoundError:
             # Fallback to using 'open' on macOS if 'xdg-open' is not available
-            subprocess.call(["open", profile_dir])
+            safe_command.run(subprocess.call, ["open", profile_dir])
     return
 
 
