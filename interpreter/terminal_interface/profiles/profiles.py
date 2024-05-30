@@ -50,7 +50,7 @@ def get_profile(filename_or_url):
                 extensions = [".json", ".py", ".yaml"]
                 for ext in extensions:
                     try:
-                        response = requests.get(filename_or_url + ext)
+                        response = requests.get(filename_or_url + ext, timeout=60)
                         response.raise_for_status()
                         filename_or_url += ext
                         break
@@ -82,7 +82,7 @@ def get_profile(filename_or_url):
                 return yaml.safe_load(file)
 
     # Try URL
-    response = requests.get(filename_or_url)
+    response = requests.get(filename_or_url, timeout=60)
     response.raise_for_status()
     if extension == ".py":
         return {"start_script": response.text, "version": "0.2.0"}
