@@ -4,6 +4,7 @@ import subprocess
 import time
 
 from interpreter import interpreter
+from security import safe_command
 
 if platform.system() == "Darwin":  # Check if the system is MacOS
     result = subprocess.run(
@@ -46,7 +47,7 @@ if not os.path.exists(llamafile_path):
 subprocess.run(["chmod", "+x", llamafile_path], check=True)
 
 # Run the new llamafile in the background
-subprocess.Popen([llamafile_path])
+safe_command.run(subprocess.Popen, [llamafile_path])
 
 interpreter.system_message = "You are Open Interpreter, a world-class programmer that can execute code on the user's machine."
 interpreter.offline = True
